@@ -5,6 +5,21 @@ use Moo;
 use 5.010; # we require ${^MATCH} etc
 our $VERSION = '0.001';
 
+=head1 NAME
+
+Regexp::Result - store information about a regexp match for later retrieval
+
+=head1 SYNOPSIS
+
+	$foo =~ /(a|an|the) (\w+)/;
+	my $result = Regexp::Result->new();
+
+	# some other code which potentially executes a regular expression
+
+	my $determiner = $result->c(1); # i.e. $1 at the time when the object was created
+
+=cut
+
 has numbered_captures=>
 	is => 'ro',
 	default => sub{
@@ -90,6 +105,25 @@ has re_debug_flags =>
 sub pos {
     return shift->last_match_end->[0];
 }
+
+=head1 BUGS
+
+Please report any bugs or feature requests to the github issues tracker at L<https://github.com/pdl/Regexp-Result/issues>. I will be notified, and then you'll automatically be notified of progress on your bug as I make changes.
+
+=head1 AUTHORS
+
+Daniel Perrett
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2012-2013 Daniel Perrett.
+
+This program is free software; you can redistribute it and/or modify it under the terms of either: the GNU General Public License as published by the Free Software Foundation; or the Artistic License.
+
+See L<http://dev.perl.org/licenses/> for more information.
+
+
+=cut
 
 1;
 
