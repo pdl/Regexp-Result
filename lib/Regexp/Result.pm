@@ -4,6 +4,7 @@ use warnings;
 use Moo;
 use 5.010; # we require ${^MATCH} etc
 our $VERSION = '0.001';
+use Sub::Name 'subname';
 
 =head1 NAME
 
@@ -110,63 +111,47 @@ sub _has_hash {
         }
 }
 
-has match =>
-	is => 'ro',
-	default => sub{
+_has_scalar match => sub{
 	   ${^MATCH}
 	};
 
-has prematch =>
-	is => 'ro',
-	default => sub{
+_has_scalar prematch => sub{
 	   ${^PREMATCH}
 	};
 
-has postmatch =>
-	is => 'ro',
-	default => sub{
+_has_scalar postmatch => sub{
 	   ${^POSTMATCH}
 	};
 
-has last_paren_match =>
-	is => 'ro',
-	default => sub{
+_has_scalar last_paren_match => sub{
 	   $+;
 	};
 
-has last_submatch_result =>
-	is => 'ro',
-	default => sub{
+_has_scalar last_submatch_result => sub{
 	   $^N;
 	};
 # these are all a bit odd in the docs
-has last_numbered_match_end =>
-	is => 'ro',
-	default => sub{
+_has_array last_numbered_match_end => sub{
 	   [@+]
 	};
 
-has last_named_paren_match =>
-	is => 'ro',
-	default => sub{
+_has_hash last_named_paren_match => sub{
 	   {%+}
 	};
 
-has last_numbered_match_start =>
-	is => 'ro',
-	default => sub{
+_has_array last_numbered_match_start => sub{
 	   [@-]
 	};
 
-has last_regexp_code_result =>
-	is => 'ro',
-	default => sub{
+_has_hash last_named_paren_match_start => sub{
+	   {%-}
+	};
+
+_has_scalar last_regexp_code_result => sub{
 	   $^R;
 	};
 
-has re_debug_flags =>
-	is => 'ro',
-	default => sub{
+_has_scalar re_debug_flags => sub{
 	   ${^RE_DEBUG_FLAGS}
 	};
 
