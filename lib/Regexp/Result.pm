@@ -48,7 +48,7 @@ sub c {
     return undef;
 }
 
-sub has_scalar {
+sub _has_scalar {
 	my ($name, $creator) = @_;
 	has $name =>
 		is => 'ro',
@@ -56,7 +56,7 @@ sub has_scalar {
 }
 
 #~ _has_array
-#~ 
+#~
 #~ 	_has_array primes => sub { [2,3,5,7,11] };
 #~	$object->primes->[0]; # 2
 #~	$object->primes(0);   # also 2
