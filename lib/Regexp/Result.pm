@@ -15,15 +15,43 @@ Regexp::Result - store information about a regexp match for later retrieval
 	$foo =~ /(a|an|the) (\w+)/;
 	my $result = Regexp::Result->new();
 
+	# ...
 	# some other code which potentially executes a regular expression
 
-	my $determiner = $result->c(1); # i.e. $1 at the time when the object was created
+	my $determiner = $result->c(1);
+	# i.e. $1 at the time when the object was created
 
-Have you ever wanted to retain information about a regular expression match, without having to go through the palaver of pulling things out of C<$1>, C<pos>, etc. and assigning them each to temporary variables until you've decided what to use them as?
+Have you ever wanted to retain information about a regular expression
+match, without having to go through the palaver of pulling things out
+of C<$1>, C<pos>, etc. and assigning them each to temporary variables
+until you've decided what to use them as?
 
-Regexp::Result objects, when created, contain as much information about a match as perl can tell you. This means that you just need to create one variable and keep it.
+Regexp::Result objects, when created, contain as much information about
+a match as perl can tell you. This means that you just need to create
+one variable and keep it.
 
-Hopefully, your code will be more comprehensible when it looks like C<< $result->last_numbered_match_start->[-1] >>instead of C<$-[-1]>. And unlike the punctuation variables, which are hidden away in C<perldoc perlvar> along with scary notation like C<$^H>, they are^H^H^H will be documented here, eventually with some realistic use cases.
+Hopefully, your code will be more comprehensible when it looks like
+C<< $result->last_numbered_match_start->[-1] >>,
+instead of C<$-[-1]>. And unlike the punctuation variables, which are
+hidden away in C<perldoc perlvar> along with scary notation like
+C<$^H>, they are^H^H^H will be documented here, eventually with some
+realistic use cases.
+
+=head1 METHODS
+
+=head3 new
+
+Creates a new Regexp::Result object. The object will gather data from
+the last match (if successful) and store it for later retrieval.
+
+Note that almost all of the contents are read-only.
+
+=cut
+
+=head3 numbered_captures
+
+This accesses C<$1>, C<$2>, etc as C<< $rr->numbered_captures->[0] >>
+etc. Note the numbering difference!
 
 =cut
 
@@ -40,6 +68,13 @@ has numbered_captures=>
 	    use strict 'refs';
 	    $captures;
 	};
+
+=head3 c
+
+This accesses the contents of C<numbered_captures>, but uses numbers from 1
+for comparability with C<$1>, C<$2>, C<$3>, etc.
+
+=cut
 
 sub c {
     my ($self, $number) = @_;
@@ -110,6 +145,37 @@ sub _has_hash {
                 *$fullName = subname( $name, $accessor );
         }
 }
+
+=head3 match, prematch, postmatch
+
+	'The quick brown fox' =~ /q[\w]+/p;
+	my $rr = Regexp::Result->new();
+	print $rr->match;     # prints 'quick'
+	print $rr->prematch;  # prints 'The '
+	print $rr->postmatch; # prints ' brown fox'
+
+When a regexp is executed with the C</p> flag, the variables
+C<${^MATCH}>, C<${^PREMATCH}>, and C<${^POSTMATCH}> are set.
+These correspond to the entire text matched by the regular expression,
+the text in the string which preceded the matched text, and the text in
+the string which followed it.
+
+The C<match> method provides access to the data in C<${^MATCH}>.
+
+The C<prematch> method provides access to the data in C<${^PREMATCH}>.
+
+The C<postmatch> method provides access to the data in C<${^POSTMATCH}>.
+
+Note: no accessor is provided for C<$&>, C<$`>, and C<$'>, because:
+
+a) The author feels they are unnecessary since perl 5.10 introduced
+C<${^MATCH}> etc.
+
+b) Implementing accessors for them would force a performance penalty
+on everyone who uses this module, even if they don't have any need of
+C<$&>.
+
+=cut
 
 _has_scalar match => sub{
 	   ${^MATCH}
