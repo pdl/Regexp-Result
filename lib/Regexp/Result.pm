@@ -59,11 +59,9 @@ has numbered_captures=>
 	is => 'ro',
 	default => sub{
 	    my $captures = [];
-	    my $i = 1;
 	    no strict 'refs';
-	    while (defined ${$i}) {
+	    for my $i (1..$#-) { #~ i.e until the end of LAST_MATCH_START
 		push @$captures, ${$i};
-		$i++;
 	    }
 	    use strict 'refs';
 	    $captures;
@@ -79,6 +77,7 @@ for comparability with C<$1>, C<$2>, C<$3>, etc.
 sub c {
     my ($self, $number) = @_;
     if ($number) {
+	#:todo: consider allowing more than one number
 	return $self->numbered_captures->[$number - 1];
     }
     return undef;
@@ -96,7 +95,6 @@ sub _has_scalar {
 #~ 	_has_array primes => sub { [2,3,5,7,11] };
 #~	$object->primes->[0]; # 2
 #~	$object->primes(0);   # also 2
-
 
 sub _has_array {
 	my ($name, $creator) = @_;
@@ -188,6 +186,18 @@ _has_scalar prematch => sub{
 _has_scalar postmatch => sub{
 	   ${^POSTMATCH}
 	};
+=head3 last_paren_match
+
+The text matched by the last capturing parentheses of the match.
+This is useful if you don't know which one of a set of
+alternative patterns matched. For example, in:
+
+	/Version: (.*)|Revision: (.*)/
+
+C<last_paren_match> stores either the version or revision (whichever
+exists); perl would number these C<$1> and C<$2>.
+
+=cut
 
 _has_scalar last_paren_match => sub{
 	   $+;
