@@ -25,4 +25,10 @@ is $rr->postmatch, 'rd.', 'postmatch';
 
 is rr->match, 'the beginning', 'match';
 
+{
+    $foo =~ /(The)|(the)/;
+    ok(!defined rr->c(1), '$1 does not exist in /(nomatch)|(match)/' );
+    is(rr->c(2), 'the', '$2 exists in /(nomatch)|(match)/' );
+}
+
 done_testing();
