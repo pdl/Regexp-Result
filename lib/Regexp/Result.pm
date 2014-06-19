@@ -188,6 +188,8 @@ _has_scalar postmatch => sub{
 	};
 =head3 last_paren_match
 
+Equivalent to C<$+>.
+
 The text matched by the last capturing parentheses of the match.
 This is useful if you don't know which one of a set of
 alternative patterns matched. For example, in:
@@ -203,10 +205,30 @@ _has_scalar last_paren_match => sub{
 	   $+;
 	};
 
+=head3 last_submatch_result
+
+Equivalent to C<$^N>.
+
+=cut
+
 _has_scalar last_submatch_result => sub{
 	   $^N;
 	};
-# these are all a bit odd in the docs
+
+=head3 last_numbered_match_end
+
+Equivalent to C<@+>.
+
+This array holds the offsets of the ends of the last successful
+submatches in the currently active dynamic scope. C<$+[0]> is the
+offset into the string of the end of the entire match. This is the
+same value as what the C<pos> function returns when called on the
+variable that was matched against. The nth element of this array
+holds the offset of the nth submatch, so C<$+[1]> is the offset past
+where $1 ends, C<$+[2]> the offset past where C<$2> ends, and so on.
+
+=cut
+
 _has_array last_numbered_match_end => sub{
 	   [@+]
 	};
