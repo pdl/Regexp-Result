@@ -225,7 +225,8 @@ offset into the string of the end of the entire match. This is the
 same value as what the C<pos> function returns when called on the
 variable that was matched against. The nth element of this array
 holds the offset of the nth submatch, so C<$+[1]> is the offset past
-where $1 ends, C<$+[2]> the offset past where C<$2> ends, and so on.
+where C<$1> ends, C<$+[2]> the offset past where C<$2> ends, and so
+on.
 
 =cut
 
@@ -233,25 +234,111 @@ _has_array last_numbered_match_end => sub{
 	   [@+]
 	};
 
-_has_hash last_named_paren_match => sub{
-	   {%+}
-	};
+=head3 last_numbered_match_start
+
+Equivalent to C<@->.
+
+This array holds the offsets of the starts of the last successful
+submatches in the currently active dynamic scope. C<$-[0]> is the
+offset into the string of the start of the entire match. The nth
+element of this array holds the offset of the nth submatch, so
+C<$-[1]> is the offset where C<$1> starts, C<$-[2]> the offset
+where C<$2> starts, and so on.
+
+=cut
 
 _has_array last_numbered_match_start => sub{
 	   [@-]
 	};
+=head3 named_paren_matches
 
-_has_hash last_named_paren_match_start => sub{
+	'wxyz' =~ /(?<ODD>w)(?<EVEN>x)(?<ODD>y)(?<EVEN>z)/
+
+	# named_paren_matches is now:
+	#
+	# {
+	#     EVEN => [ 'x', 'z' ],
+	#     ODD  => [ 'w', 'y' ]
+	# }
+
+Equivalent to C<%->.
+
+This variable allows access to the named capture
+groups in the last successful match in the currently active
+dynamic scope. To each capture group name found in the regular
+expression, it associates a reference to an array containing the
+list of values captured by all buffers with that name (should
+there be several of them), in the order where they appear.
+
+=cut
+
+_has_hash named_paren_matches => sub{
 	   {%-}
 	};
+
+=head3 last_named_paren_matches
+
+	'wxyz' =~ /(?<ODD>w)(?<EVEN>x)(?<ODD>y)(?<EVEN>z)/
+
+	# last_named_paren_matches is now:
+	#
+	# {
+	#     EVEN => 'x',
+	#     ODD  => 'w',
+	# }
+
+The "%+" hash allows access to the named capture
+buffers, should they exist, in the last successful match in the
+currently active dynamic scope.
+
+The keys of the "%+" hash list only the names of buffers that have
+captured (and that are thus associated to defined values).
+
+Note: C<%-> and C<%+> are tied views into a common internal hash
+associated with the last successful regular expression. Therefore
+mixing iterative access to them via C<each> may have unpredictable
+results. Likewise, if the last successful match changes, then the
+results may be surprising.
+
+Author's note: I have no idea why this is a useful thing to use.
+But perl provides it, and it is occasionally used according to
+L<http://grep.cpan.me/> (461 distros, of which some the string
+C<\%\+|\$\+\{> is in a binary stream).
+
+=cut
+
+_has_hash last_named_paren_match => sub{
+	   {%+}
+	};
+
+=head3 last_regexp_code_result
+
+The result of evaluation of the last successful C<(?{ code })>
+regular expression assertion (see L<perlre>).
+
+=cut
 
 _has_scalar last_regexp_code_result => sub{
 	   $^R;
 	};
 
+=head3 re_debug_flags
+
+The current value of the regex debugging flags. Set to 0 for no
+debug output even when the C<re 'debug'> module is loaded. See
+L<re> for details.
+
+=cut
+
 _has_scalar re_debug_flags => sub{
 	   ${^RE_DEBUG_FLAGS}
 	};
+
+=head3 pos
+
+Returns the end of the match. Equivalent to C<$+[0]>.
+
+=cut
 
 sub pos {
     return shift->last_match_end->[0];
