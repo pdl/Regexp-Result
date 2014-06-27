@@ -3,3 +3,5 @@ lib/Regexp/Result.pm
 MANIFEST
 README
 t/simple-stuff.t
+Makefile.PL
+
