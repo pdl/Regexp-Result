@@ -32,10 +32,8 @@ one variable and keep it.
 
 Hopefully, your code will be more comprehensible when it looks like
 C<< $result->last_numbered_match_start->[-1] >>,
-instead of C<$-[-1]>. And unlike the punctuation variables, which are
-hidden away in C<perldoc perlvar> along with scary notation like
-C<$^H>, they are^H^H^H will be documented here, eventually with some
-realistic use cases.
+instead of C<$-[-1]>. The punctuation variables, by the way, are
+hidden away in C<perldoc perlvar> along with scary things like C<^H>.
 
 =head1 METHODS
 
