@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Moo;
 use 5.010; # we require ${^MATCH} etc
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 use Sub::Name 'subname';
 
 =head1 NAME
