@@ -4,6 +4,8 @@ use warnings;
 use Moo;
 use 5.010; # we require ${^MATCH} etc
 our $VERSION = '0.003';
+use Exporter qw(import);
+our @EXPORT_OK = qw(rr);
 use Sub::Name 'subname';
 
 =head1 NAME
@@ -14,6 +16,9 @@ Regexp::Result - store information about a regexp match for later retrieval
 
 	$foo =~ /(a|an|the) (\w+)/;
 	my $result = Regexp::Result->new();
+	
+	# or, equivalently
+	my $result = rr;	
 
 	# ...
 	# some other code which potentially executes a regular expression
@@ -36,6 +41,23 @@ instead of C<$-[-1]>. The documentation for the punctuation
 variables, by the way, is hidden away in C<perldoc perlvar>
 along with scary things like C<^H>. I've copied most of it and/or
 rewritten it below.
+
+=head1 FUNCTIONS
+
+=head3 rr
+
+	use Regexp::Result qw(rr);
+	
+	$foo =~ /(a|an|the) (\w+)/;
+	my $result = rr;	
+
+Equivalent to calling C<< Regexp::Result->new() >>.	
+
+=cut
+
+sub rr {
+	__PACKAGE__->new
+}
 
 =head1 METHODS
 
