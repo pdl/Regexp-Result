@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Moo;
 use 5.010; # we require ${^MATCH} etc
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 use Exporter qw(import);
 our @EXPORT_OK = qw(rr);
 use Sub::Name 'subname';
