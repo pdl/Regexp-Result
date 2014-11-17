@@ -366,6 +366,10 @@ sub pos {
     return shift->last_match_end->[0];
 }
 
+=head1 SEE ALSO
+
+If you just want a list of numbered captures, consider L<Data::Munge>, which provides the function C<captures>.
+
 =head1 BUGS
 
 Please report any bugs or feature requests to the github issues tracker at L<https://github.com/pdl/Regexp-Result/issues>. I will be notified, and then you'll automatically be notified of progress on your bug as I make changes.
@@ -376,12 +380,11 @@ Daniel Perrett
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2012-2013 Daniel Perrett.
+Copyright 2012-2014 Daniel Perrett.
 
 This program is free software; you can redistribute it and/or modify it under the terms of either: the GNU General Public License as published by the Free Software Foundation; or the Artistic License.
 
 See L<http://dev.perl.org/licenses/> for more information.
-
 
 =cut
 
