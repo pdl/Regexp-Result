@@ -1,5 +1,5 @@
 Unreleased Changes
-		None
+		Acknowledged Data::Munge in docs.
 0.004	2014-10-27
 		Added function rr equivalent to Regexp::Result->new
 0.003	2014-06-28
